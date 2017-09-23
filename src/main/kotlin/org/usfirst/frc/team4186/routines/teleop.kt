@@ -18,8 +18,6 @@ class Teleop(
     private val joystickAdapter: SaitekX52Adapter,
     private val sonar: PIDSource,
     private val ahrs: AHRS,
-    private val turn: (angle: Double) -> Command,
-    private val scheduler: Scheduler,
     private val startCamera: (cameraId: Int) -> UsbCamera
 ) : State {
 
@@ -34,8 +32,6 @@ class Teleop(
   private lateinit var frontCamera: UsbCamera
   private lateinit var backCamera: UsbCamera
 
-  private var turning: Command? = null
-
   override fun init() {
     println("Teleop Init")
     drive.report()
@@ -46,23 +42,9 @@ class Teleop(
   }
 
   override fun tick() {
-//    turning?.let {
-//      if (!it.isRunning) {
-//        turning = null
-//      }
-//      scheduler.run()
-//    }
     with(joystickState.updated) {
       climber.set(climbing)
-//      if (pov[0] != -1) {
-//        turning?.cancel()
-//        turning = turn(45.0)
-//        turning?.start()
-//      }
-
-      if (turning == null) {
-        drive.drive(throttle, yaw)
-      }
+      drive.drive(throttle, yaw)
     }
 
     SmartDashboard.putNumber("sonar", sonar.pidGet())
