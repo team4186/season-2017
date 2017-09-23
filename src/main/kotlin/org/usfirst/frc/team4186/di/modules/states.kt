@@ -23,8 +23,6 @@ val states_module = Kodein.Module {
         joystickAdapter = instance(),
         sonar = instance(Hardware.Sonar.FRONT),
         ahrs = instance(),
-        turn = factory(Commands.TURN),
-        scheduler = instance(),
         startCamera = factory()
     )
   }
